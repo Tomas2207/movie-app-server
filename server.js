@@ -31,7 +31,7 @@ app.use(
 app.use(cookieParser('secret'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.set('trust proxy');
+app.set('trust proxy', 1);
 app.use(
   session({
     name: '__session',
