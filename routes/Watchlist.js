@@ -37,13 +37,47 @@ router.delete('/movie/:id', async (req, res) => {
   }
 });
 
-router.post('/:id', async (req, res) => {
+router.patch('/:id', async (req, res) => {
+  let movie;
+  console.log(req.body.rating);
+  console.log(req.in_watchlist);
+
   try {
-    const movie = new Movie({
-      user: req.params.id,
-      id: req.body.id,
-      poster_path: req.body.poster_path,
-    });
+    if (req.body.rating == null) {
+      console.log('hell yeah');
+      movie = await Movie.findByIdAndUpdate(req.params.id, {
+        in_watchlist: req.body.in_watchlist,
+      });
+    } else if (req.body.in_watchlist == null) {
+      movie = await Movie.findByIdAndUpdate(req.params.id, {
+        rating: req.body.rating,
+      });
+    }
+    await movie.save();
+    res.json({ message: 'Updated Succesfully' });
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+});
+
+router.post('/:id', async (req, res) => {
+  let movie;
+  try {
+    if (req.body.rating == null) {
+      movie = new Movie({
+        user: req.params.id,
+        id: req.body.id,
+        poster_path: req.body.poster_path,
+        in_watchlist: req.body.in_watchlist,
+      });
+    } else if (req.body.in_watchlist == null) {
+      movie = new Movie({
+        user: req.params.id,
+        id: req.body.id,
+        poster_path: req.body.poster_path,
+        rating: req.body.rating,
+      });
+    }
 
     const newMovie = await movie.save();
     res.json(newMovie);

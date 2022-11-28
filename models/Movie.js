@@ -14,6 +14,12 @@ const movieSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  in_watchlist: {
+    type: Boolean,
+  },
+  rating: {
+    type: Number,
+  },
 });
 
 module.exports = mongoose.model('Movie', movieSchema);
